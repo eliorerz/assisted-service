@@ -2152,7 +2152,7 @@ func (b *bareMetalInventory) GetCluster(ctx context.Context, params installer.Ge
 
 func (b *bareMetalInventory) GetClusterInternal(ctx context.Context, params installer.GetClusterParams) (*common.Cluster, error) {
 	log := logutil.FromContext(ctx, b.log)
-	var cluster common.Cluster
+	var c common.Cluster
 
 	db := b.db
 	if swag.BoolValue(params.GetUnregisteredClusters) {
@@ -2169,20 +2169,26 @@ func (b *bareMetalInventory) GetClusterInternal(ctx context.Context, params inst
 				return db.Unscoped()
 			}
 			return db
-		}).First(&cluster, "id = ?", params.ClusterID).Error; err != nil {
+		}).First(&c, "id = ?", params.ClusterID).Error; err != nil {
 		// TODO: check for the right error
 		return nil, common.NewApiError(http.StatusNotFound, err)
 	}
 
-	cluster.HostNetworks = calculateHostNetworks(log, &cluster)
-	for _, host := range cluster.Hosts {
+	c.HostNetworks = calculateHostNetworks(log, &c)
+	for _, host := range c.Hosts {
 		if err := b.customizeHost(host); err != nil {
 			return nil, common.NewApiError(http.StatusInternalServerError, err)
 		}
 		// Clear this field as it is not needed to be sent via API
 		host.FreeAddresses = ""
 	}
-	return &cluster, nil
+
+	cc, _ := cluster.GetCluster(ctx, log, db, string(*c.ID))
+	if cc != nil {
+		c = *cc
+	}
+
+	return &c, nil
 }
 
 func (b *bareMetalInventory) GetHostRequirements(ctx context.Context, params installer.GetHostRequirementsParams) middleware.Responder {
