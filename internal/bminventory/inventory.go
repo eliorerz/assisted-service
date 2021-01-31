@@ -616,7 +616,7 @@ func (b *bareMetalInventory) RegisterClusterInternal(
 		kubeKey = &types.NamespacedName{}
 	}
 
-	cluster := common.Cluster{
+	c := common.Cluster{
 		Cluster: models.Cluster{
 			ID:                       &id,
 			Href:                     swag.String(url.String()),
@@ -652,7 +652,7 @@ func (b *bareMetalInventory) RegisterClusterInternal(
 		log.Error("Failed to compute cluster proxy hash", err)
 		return nil, common.NewApiError(http.StatusInternalServerError, errors.Errorf("Failed to compute cluster proxy hash"))
 	} else {
-		cluster.ProxyHash = proxyHash
+		c.ProxyHash = proxyHash
 	}
 
 	pullSecret := swag.StringValue(params.NewClusterParams.PullSecret)
@@ -666,29 +666,37 @@ func (b *bareMetalInventory) RegisterClusterInternal(
 		return nil, common.NewApiError(http.StatusBadRequest,
 			errors.New("Failed to update Pull-secret with additional credentials"))
 	}
-	setPullSecret(&cluster, ps)
+	setPullSecret(&c, ps)
 
 	if err = validations.ValidateClusterNameFormat(swag.StringValue(params.NewClusterParams.Name)); err != nil {
 		return nil, common.NewApiError(http.StatusBadRequest, err)
 	}
 
-	if sshPublicKey := swag.StringValue(&cluster.SSHPublicKey); sshPublicKey != "" {
-		sshPublicKey = strings.TrimSpace(cluster.SSHPublicKey)
+	if sshPublicKey := swag.StringValue(&c.SSHPublicKey); sshPublicKey != "" {
+		sshPublicKey = strings.TrimSpace(c.SSHPublicKey)
 		if err = validations.ValidateSSHPublicKey(sshPublicKey); err != nil {
 			return nil, common.NewApiError(http.StatusBadRequest, err)
 		}
-		cluster.SSHPublicKey = sshPublicKey
+		c.SSHPublicKey = sshPublicKey
 	}
 
-	err = b.clusterApi.RegisterCluster(ctx, &cluster)
+	err = b.clusterApi.RegisterCluster(ctx, &c)
 	if err != nil {
 		log.Errorf("failed to register cluster %s ", swag.StringValue(params.NewClusterParams.Name))
 		return nil, common.NewApiError(http.StatusInternalServerError, err)
 	}
 
 	success = true
-	b.metricApi.ClusterRegistered(swag.StringValue(params.NewClusterParams.OpenshiftVersion), *cluster.ID, cluster.EmailDomain)
-	return &cluster, nil
+	b.metricApi.ClusterRegistered(swag.StringValue(params.NewClusterParams.OpenshiftVersion), *c.ID, c.EmailDomain)
+
+	cc, _ := b.GetClusterInternal(ctx, installer.GetClusterParams{ClusterID: *c.ID})
+	if cc != nil {
+		c = *cc
+	} else {
+		log.Warnf("failed to get cluster %s ", swag.StringValue(params.NewClusterParams.Name))
+	}
+
+	return &c, nil
 }
 
 func convertFromClusterOperators(operators models.ListOperators) string {
@@ -2182,11 +2190,11 @@ func (b *bareMetalInventory) GetClusterInternal(ctx context.Context, params inst
 		// Clear this field as it is not needed to be sent via API
 		host.FreeAddresses = ""
 	}
-
-	cc, _ := cluster.GetCluster(ctx, log, db, string(*c.ID))
-	if cc != nil {
-		c = *cc
-	}
+	//
+	//cc, _ := cluster.GetCluster(ctx, log, db, string(*c.ID))
+	//if cc != nil {
+	//	c = *cc
+	//}
 
 	return &c, nil
 }
