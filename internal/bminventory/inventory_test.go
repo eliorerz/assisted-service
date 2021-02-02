@@ -2030,7 +2030,6 @@ var _ = Describe("cluster", func() {
 			bm.clusterApi = cluster.NewManager(cluster.Config{}, common.GetTestLog().WithField("pkg", "cluster-monitor"),
 				db, mockEvents, nil, nil, nil, nil)
 
-			//mockClusterApi.EXPECT().RegisterCluster(ctx, gomock.Any()).Return(nil).Times(1)
 			mockEvents.EXPECT().
 				AddEvent(gomock.Any(), gomock.Any(), nil, models.EventSeverityInfo, gomock.Any(), gomock.Any()).
 				Times(2)
@@ -5224,7 +5223,6 @@ var _ = Describe("TestRegisterCluster", func() {
 	})
 
 	It("UserManagedNetworking default value", func() {
-		//mockClusterApi.EXPECT().RegisterCluster(ctx, gomock.Any()).Return(nil).Times(1)
 		mockEvents.EXPECT().
 			AddEvent(gomock.Any(), gomock.Any(), nil, models.EventSeverityInfo, gomock.Any(), gomock.Any()).
 			Times(2)
@@ -5245,7 +5243,6 @@ var _ = Describe("TestRegisterCluster", func() {
 	})
 
 	It("UserManagedNetworking non default value", func() {
-		//mockClusterApi.EXPECT().RegisterCluster(ctx, gomock.Any()).Return(nil).Times(1)
 		mockEvents.EXPECT().
 			AddEvent(gomock.Any(), gomock.Any(), nil, models.EventSeverityInfo, gomock.Any(), gomock.Any()).
 			Times(2)
@@ -5298,7 +5295,6 @@ var _ = Describe("TestRegisterCluster", func() {
 			defaultNtpSource := "clock.redhat.com"
 			bm.Config.DefaultNTPSource = defaultNtpSource
 
-			//mockClusterApi.EXPECT().RegisterCluster(ctx, gomock.Any()).Return(nil).Times(1)
 			mockEvents.EXPECT().
 				AddEvent(gomock.Any(), gomock.Any(), nil, models.EventSeverityInfo, gomock.Any(), gomock.Any()).
 				Times(2)
@@ -5321,7 +5317,6 @@ var _ = Describe("TestRegisterCluster", func() {
 		It("NTPSource non default value", func() {
 			newNtpSource := "new.ntp.source"
 
-			//mockClusterApi.EXPECT().RegisterCluster(ctx, gomock.Any()).Return(nil).Times(1)
 			mockEvents.EXPECT().
 				AddEvent(gomock.Any(), gomock.Any(), nil, models.EventSeverityInfo, gomock.Any(), gomock.Any()).
 				Times(2)
