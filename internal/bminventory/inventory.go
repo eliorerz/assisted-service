@@ -140,6 +140,7 @@ type InstallerInternals interface {
 	UpdateClusterInstallConfigInternal(ctx context.Context, params installer.UpdateClusterInstallConfigParams) (*common.Cluster, error)
 	CancelInstallationInternal(ctx context.Context, params installer.CancelInstallationParams) (*common.Cluster, error)
 	AddOpenshiftVersion(ctx context.Context, ocpReleaseImage, pullSecret string) (*models.OpenshiftVersion, error)
+	GetClusterSupportedPlatformsInternal(ctx context.Context, params installer.GetClusterSupportedPlatformsParams) (*[]models.PlatformType, error)
 }
 
 //go:generate mockgen -package bminventory -destination mock_crd_utils.go . CRDUtils
@@ -1516,6 +1517,32 @@ func (b *bareMetalInventory) GetClusterDefaultConfig(_ context.Context, _ instal
 	body.InactiveDeletionHours = int64(b.gcConfig.DeregisterInactiveAfter.Hours())
 
 	return installer.NewGetClusterDefaultConfigOK().WithPayload(&body)
+}
+
+func (b *bareMetalInventory) GetClusterSupportedPlatformsInternal(ctx context.Context, params installer.GetClusterSupportedPlatformsParams) (*[]models.PlatformType, error) {
+	cluster, err := b.GetClusterInternal(ctx, installer.GetClusterParams{ClusterID: params.ClusterID})
+	if err != nil {
+		return nil, err
+	}
+
+	var hostsPlatforms []models.PlatformType
+	for _, h := range cluster.Hosts {
+		inventory, err := hostutil.UnmarshalInventory(h.Inventory)
+		if err != nil {
+			return nil, err
+		}
+		common.AppendPlatformFromVendor(*inventory.SystemVendor, &hostsPlatforms)
+	}
+
+	return common.DecideSupportedPlatforms(hostsPlatforms, len(cluster.Hosts)), nil
+}
+
+func (b *bareMetalInventory) GetClusterSupportedPlatforms(ctx context.Context, params installer.GetClusterSupportedPlatformsParams) middleware.Responder {
+	supportedPlatforms, err := b.GetClusterSupportedPlatformsInternal(ctx, params)
+	if err != nil {
+		return common.GenerateErrorResponder(err)
+	}
+	return installer.NewGetClusterSupportedPlatformsOK().WithPayload(*supportedPlatforms)
 }
 
 func (b *bareMetalInventory) UpdateClusterInstallConfig(ctx context.Context, params installer.UpdateClusterInstallConfigParams) middleware.Responder {
