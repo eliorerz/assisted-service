@@ -68,7 +68,7 @@ require (
 	go.elastic.co/apm/module/apmlogrus v1.15.0
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
-	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c
+	golang.org/x/sys v0.0.0-20210831042530-f4d43177bf5e
 	golang.org/x/tools v0.1.5 // indirect
 	gopkg.in/ini.v1 v1.51.0
 	gopkg.in/square/go-jose.v2 v2.6.0
@@ -76,10 +76,10 @@ require (
 	gorm.io/driver/postgres v1.2.1
 	gorm.io/gorm v1.22.3
 	k8s.io/api v0.21.1
-	k8s.io/apimachinery v0.21.1
+	k8s.io/apimachinery v0.23.1
 	k8s.io/client-go v12.0.0+incompatible
 	k8s.io/kube-aggregator v0.20.0
-	k8s.io/utils v0.0.0-20210527160623-6fdb442a123b
+	k8s.io/utils v0.0.0-20210930125809-cb0fa318a74b
 	sigs.k8s.io/controller-runtime v0.9.0
 	sigs.k8s.io/yaml v1.2.0
 )
