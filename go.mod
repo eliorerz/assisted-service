@@ -19,7 +19,7 @@ require (
 	github.com/go-gormigrate/gormigrate/v2 v2.0.0
 	github.com/go-openapi/errors v0.20.2
 	github.com/go-openapi/loads v0.21.1
-	github.com/go-openapi/runtime v0.19.24
+	github.com/go-openapi/runtime v0.23.2
 	github.com/go-openapi/spec v0.20.4
 	github.com/go-openapi/strfmt v0.21.2
 	github.com/go-openapi/swag v0.21.1
@@ -126,7 +126,7 @@ require (
 	github.com/go-openapi/analysis v0.21.2 // indirect
 	github.com/go-openapi/jsonpointer v0.19.5 // indirect
 	github.com/go-openapi/jsonreference v0.19.6 // indirect
-	github.com/go-stack/stack v1.8.0 // indirect
+	github.com/go-stack/stack v1.8.1 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/golang/glog v1.0.0 // indirect
@@ -160,7 +160,7 @@ require (
 	github.com/matttproud/golang_protobuf_extensions v1.0.2-0.20181231171920-c182affec369 // indirect
 	github.com/metal3-io/baremetal-operator/pkg/hardwareutils v0.0.0 // indirect
 	github.com/microcosm-cc/bluemonday v1.0.15 // indirect
-	github.com/mitchellh/mapstructure v1.4.1 // indirect
+	github.com/mitchellh/mapstructure v1.4.3 // indirect
 	github.com/moby/term v0.0.0-20210610120745-9d4ed1856297 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
@@ -171,6 +171,7 @@ require (
 	github.com/opencontainers/image-spec v1.0.2 // indirect
 	github.com/opencontainers/runc v1.0.2 // indirect
 	github.com/openshift/cluster-api-provider-gcp v0.0.1-0.20201002065957-9854f7420570 // indirect
+	github.com/opentracing/opentracing-go v1.2.0 // indirect
 	github.com/ovirt/go-ovirt v0.0.0-20210809163552-d4276e35d3db // indirect
 	github.com/ovirt/go-ovirt-client-log/v2 v2.1.0 // indirect
 	github.com/pierrec/lz4 v2.3.0+incompatible // indirect
@@ -192,7 +193,7 @@ require (
 	go.etcd.io/etcd/api/v3 v3.5.0 // indirect
 	go.etcd.io/etcd/client/pkg/v3 v3.5.0 // indirect
 	go.etcd.io/etcd/client/v3 v3.5.0 // indirect
-	go.mongodb.org/mongo-driver v1.7.5 // indirect
+	go.mongodb.org/mongo-driver v1.8.3 // indirect
 	go.opentelemetry.io/contrib v0.20.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.20.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.20.0 // indirect
