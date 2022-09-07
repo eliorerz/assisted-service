@@ -224,8 +224,8 @@ github.com/aws/aws-sdk-go v1.27.0/go.mod h1:KmX6BPdI08NWTb3/sm4ZGu5ShLoqVDhKgpiN
 github.com/aws/aws-sdk-go v1.30.28/go.mod h1:5zCpMtNQVjRREroY7sYe8lOMRSxkhG6MZveU8YkpAk0=
 github.com/aws/aws-sdk-go v1.32.6/go.mod h1:5zCpMtNQVjRREroY7sYe8lOMRSxkhG6MZveU8YkpAk0=
 github.com/aws/aws-sdk-go v1.36.30/go.mod h1:hcU610XS61/+aQV88ixoOzUoG7v3b31pl2zKMmprdro=
-github.com/aws/aws-sdk-go v1.44.51 h1:jO9hoLynZOrMM4dj0KjeKIK+c6PA+HQbKoHOkAEye2Y=
-github.com/aws/aws-sdk-go v1.44.51/go.mod h1:y4AeaBuwd2Lk+GepC1E9v0qOiTws0MIWAX4oIKwKHZo=
+github.com/aws/aws-sdk-go v1.44.93 h1:hAgd9fuaptBatSft27/5eBMdcA8+cIMqo96/tZ6rKl8=
+github.com/aws/aws-sdk-go v1.44.93/go.mod h1:y4AeaBuwd2Lk+GepC1E9v0qOiTws0MIWAX4oIKwKHZo=
 github.com/aws/aws-sdk-go-v2 v0.18.0/go.mod h1:JWVYvqSMppoMJC0x5wdwiImzgXTI9FuZwxzkQq9wy+g=
 github.com/aymerick/douceur v0.2.0 h1:Mv+mAeH1Q+n9Fr+oyamOlAkUNPWPlA8PPGR0QAaYuPk=
 github.com/aymerick/douceur v0.2.0/go.mod h1:wlT5vV2O3h55X9m7iVYN0TBM0NH/MmbLnd30/FjWUq4=
@@ -1480,6 +1480,8 @@ github.com/nishanths/exhaustive v0.1.0/go.mod h1:S1j9110vxV1ECdCudXRkeMnFQ/DQk9a
 github.com/nishanths/exhaustive v0.7.11/go.mod h1:gX+MP7DWMKJmNa1HfMozK+u04hQd3na9i0hyqf3/dOI=
 github.com/nishanths/predeclared v0.0.0-20190419143655-18a43bb90ffc/go.mod h1:62PewwiQTlm/7Rj+cxVYqZvDIUc+JjZq6GHAC1fsObQ=
 github.com/nishanths/predeclared v0.2.1/go.mod h1:HvkGJcA3naj4lOwnFXFDkFxVtSqQMB9sbB1usJ+xjQE=
+github.com/nmstate/nmstate/rust/src/go/nmstate v0.0.0-20220607152231-19ae93c60f0d h1:TxXI7v9FlXgg6Ztjcr/6Q6543trKA/wlSgqqjvoDe5E=
+github.com/nmstate/nmstate/rust/src/go/nmstate v0.0.0-20220607152231-19ae93c60f0d/go.mod h1:+V7mCwK24P5oGufZaSOl2707IiCbgJYpGohmKupvwBw=
 github.com/nxadm/tail v1.4.4/go.mod h1:kenIhsEOeOJmVchQTgglprH7qJGnHDVpk1VPCcaMI8A=
 github.com/nxadm/tail v1.4.8 h1:nPr65rt6Y5JFSKQO7qToXr7pePgD6Gwiw05lkbyAQTE=
 github.com/nxadm/tail v1.4.8/go.mod h1:+ncqLTQzXmGhMZNUePPaPqPvBxHAIsmXswZKocGu+AU=

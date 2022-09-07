@@ -5,7 +5,7 @@ go 1.17
 require (
 	github.com/alecthomas/units v0.0.0-20190924025748-f65c72e2690d
 	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d
-	github.com/aws/aws-sdk-go v1.44.51
+	github.com/aws/aws-sdk-go v1.44.93
 	github.com/buger/jsonparser v1.1.1
 	github.com/cavaliercoder/go-cpio v0.0.0-20180626203310-925f9528c45e
 	github.com/containers/image/v5 v5.20.0
@@ -37,6 +37,7 @@ require (
 	github.com/kennygrant/sanitize v1.2.4
 	github.com/metal3-io/baremetal-operator/apis v0.0.0
 	github.com/moby/moby v20.10.17+incompatible
+	github.com/nmstate/nmstate/rust/src/go/nmstate v0.0.0-20220607152231-19ae93c60f0d
 	github.com/onsi/ginkgo v1.16.5
 	github.com/onsi/gomega v1.19.0
 	github.com/openshift-online/ocm-sdk-go v0.1.205
