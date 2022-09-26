@@ -3,9 +3,10 @@ module github.com/openshift/assisted-service
 go 1.17
 
 require (
+	github.com/NYTimes/gziphandler v1.1.1
 	github.com/alecthomas/units v0.0.0-20190924025748-f65c72e2690d
 	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d
-	github.com/aws/aws-sdk-go v1.44.51
+	github.com/aws/aws-sdk-go v1.44.105
 	github.com/buger/jsonparser v1.1.1
 	github.com/cavaliercoder/go-cpio v0.0.0-20180626203310-925f9528c45e
 	github.com/containers/image/v5 v5.20.0
@@ -96,7 +97,6 @@ require (
 	github.com/Azure/go-autorest/logger v0.2.1 // indirect
 	github.com/Azure/go-autorest/tracing v0.6.0 // indirect
 	github.com/Microsoft/go-winio v0.5.2 // indirect
-	github.com/NYTimes/gziphandler v1.1.1 // indirect
 	github.com/Nvveen/Gotty v0.0.0-20120604004816-cd527374f1e5 // indirect
 	github.com/armon/go-radix v1.0.0 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
