@@ -575,12 +575,12 @@ func (b *bareMetalInventory) RegisterClusterInternal(
 
 	if params.NewClusterParams.OlmOperators != nil {
 		var newOLMOperators []*models.MonitoredOperator
-		newOLMOperators, err = b.getOLMOperators(&cluster, params.NewClusterParams.OlmOperators)
+		newOLMOperators, err = b.getOLMOperators(&cluster, params.NewClusterParams.OlmOperators, log)
 		if err != nil {
 			return nil, err
 		}
 
-		err = operators.EnsureLVMAndCNVDoNotClash(*releaseImage.Version, newOLMOperators)
+		err = b.operatorManagerApi.EnsureOperatorPrerequisite(&cluster, *releaseImage.Version, newOLMOperators)
 		if err != nil {
 			log.Error(err)
 			return nil, common.NewApiError(http.StatusBadRequest, err)
@@ -2721,12 +2721,12 @@ func (b *bareMetalInventory) updateOperatorsData(ctx context.Context, cluster *c
 		return nil
 	}
 
-	updateOLMOperators, err := b.getOLMOperators(cluster, params.ClusterUpdateParams.OlmOperators)
+	updateOLMOperators, err := b.getOLMOperators(cluster, params.ClusterUpdateParams.OlmOperators, log)
 	if err != nil {
 		return err
 	}
 
-	err = operators.EnsureLVMAndCNVDoNotClash(cluster.OpenshiftVersion, updateOLMOperators)
+	err = b.operatorManagerApi.EnsureOperatorPrerequisite(cluster, cluster.OpenshiftVersion, updateOLMOperators)
 	if err != nil {
 		log.Error(err)
 		return common.NewApiError(http.StatusBadRequest, err)
@@ -2775,36 +2775,49 @@ func (b *bareMetalInventory) updateOperatorsData(ctx context.Context, cluster *c
 	return nil
 }
 
-func (b *bareMetalInventory) getOLMOperators(cluster *common.Cluster, newOperators []*models.OperatorCreateParams) ([]*models.MonitoredOperator, error) {
+func (b *bareMetalInventory) getOLMOperators(cluster *common.Cluster, newOperators []*models.OperatorCreateParams, log logrus.FieldLogger) ([]*models.MonitoredOperator, error) {
 	monitoredOperators := make([]*models.MonitoredOperator, 0)
 
 	for _, newOperator := range newOperators {
+		b.log.Infof("Creating MonitoredOperator for %s operator", newOperator.Name)
 		if newOperator.Name == "ocs" {
 			newOperator.Name = "odf"
 		}
 		operator, err := b.operatorManagerApi.GetOperatorByName(newOperator.Name)
 		if err != nil {
+			b.log.Errorf("Failed to get %s operator, %s", newOperator.Name, err.Error())
 			return nil, common.NewApiError(http.StatusBadRequest, err)
 		}
 
-		// TODO - Need to find a better way for creating LVMO/LVMS operator on different openshift-version
-		if operator.Name == "lvm" {
-			lvmsMetMinOpenshiftVersion, err := common.VersionGreaterOrEqual(cluster.OpenshiftVersion, lvm.LvmsMinOpenshiftVersion)
-			if err != nil {
-				operator.SubscriptionName = lvm.LvmsSubscriptionName
-			} else if lvmsMetMinOpenshiftVersion {
-				operator.SubscriptionName = lvm.LvmsSubscriptionName
-			} else {
-				operator.SubscriptionName = lvm.LvmoSubscriptionName
-			}
-		}
-
 		operator.Properties = newOperator.Properties
-
 		monitoredOperators = append(monitoredOperators, operator)
 	}
 
-	return b.operatorManagerApi.ResolveDependencies(cluster, monitoredOperators)
+	operatorDependencies, err := b.operatorManagerApi.ResolveDependencies(cluster, monitoredOperators)
+	if err != nil {
+		b.log.Errorf("Failed to resolve operators dependencies, %+v, %s", monitoredOperators, err.Error())
+		return nil, err
+	}
+
+	for _, monitoredOperator := range operatorDependencies {
+		// TODO - Need to find a better way for creating LVMO/LVMS operator on different openshift-version
+		if monitoredOperator.Name == "lvm" {
+			lvmsMetMinOpenshiftVersion, err := common.BaseVersionGreaterOrEqual(cluster.OpenshiftVersion, lvm.LvmsMinOpenshiftVersion)
+			if err != nil {
+				log.Warnf("Error parsing cluster.OpenshiftVersion: %s, setting subscription name to %s", err.Error(), lvm.LvmsSubscriptionName)
+				monitoredOperator.SubscriptionName = lvm.LvmsSubscriptionName
+			} else if lvmsMetMinOpenshiftVersion {
+				log.Infof("LVMS minimum requirement met (OpenshiftVersion=%s), setting subscription name to %s ", cluster.OpenshiftVersion, lvm.LvmsSubscriptionName)
+				monitoredOperator.SubscriptionName = lvm.LvmsSubscriptionName
+			} else {
+				log.Infof("LVMS minimum requirement didn't met (OpenshiftVersion=%s), setting subscription name to %s ", cluster.OpenshiftVersion, lvm.LvmoSubscriptionName)
+				monitoredOperator.SubscriptionName = lvm.LvmoSubscriptionName
+			}
+		}
+
+	}
+
+	return operatorDependencies, nil
 }
 
 func (b *bareMetalInventory) updateHostsAndClusterStatus(ctx context.Context, cluster *common.Cluster, db *gorm.DB, log logrus.FieldLogger) error {

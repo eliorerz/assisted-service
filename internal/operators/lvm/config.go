@@ -6,6 +6,7 @@ import (
 
 const (
 	// LvmMinOpenshiftVersion is the minimum OCP version in which lvmo is supported
+	// Any changes here should be updated at line 16 too.
 	LvmoMinOpenshiftVersion string = "4.11.0"
 	LvmsMinOpenshiftVersion string = "4.12.0"
 
